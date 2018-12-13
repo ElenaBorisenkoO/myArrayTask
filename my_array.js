@@ -53,3 +53,22 @@ myArray.prototype.forEach = function(){
 				}
 			}
 		}
+
+		myArray.prototype.map = function(){
+			var resultArr=[];
+			if(arguments.length!==0 && (typeof arguments[0]==='function')){
+
+				for(let i=0; i<this.elements.length; i++){
+				
+					arguments[0](this.elements[i],i,this.elements);
+			  	    resultArr[i] = this.elements[i];
+				
+		 	}
+		 	this.elements=resultArr;
+
+		 }
+
+			return this.elements;
+		}
+
+
