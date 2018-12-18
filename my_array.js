@@ -54,6 +54,8 @@ myArray.prototype.forEach = function(){
 			}
 		}
 
+		
+
 
 		myArray.prototype.map = function(){
 			var resultArr=[];
@@ -155,14 +157,14 @@ myArray.prototype.forEach = function(){
                 let applyMapFunction = (mapFunction !== undefined && typeof mapFunction === 'function');
 
                 var newInstance = new myArray();
+                
                 for (let i = 0; i < elements.length; i++) {
                 	newInstance[i] = applyMapFunction ? mapFunction(elements[i]) : elements[i];
                 }
                 return newInstance;
             };
 
-
-
+          
             myArray.prototype.sort = function (comparator) {
 
             	function defaultComparator(a, b) {
@@ -193,10 +195,8 @@ myArray.prototype.forEach = function(){
             		}
             		barrier--;
             	}
+                return this.elements;
             };
-            
-
-
             
 
 
