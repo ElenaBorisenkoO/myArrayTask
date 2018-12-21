@@ -2,7 +2,7 @@ import MyArray from '../index';
 
 
 describe('tests for method push', () => {
-  let arr;
+  let arr = new MyArray(1, 2, 3);
 
   beforeEach(() => {
     arr = new MyArray(1, 2, 3);
@@ -14,7 +14,7 @@ describe('tests for method push', () => {
   });
 
   test('instance has not own property push', () => {
-    expect(arr.hasOwnProperty('push')).toBeFalsy();
+    expect(arr.Object.prototype.hasOwnProperty.call('push')).toBeFalsy();
   });
 
   test('method returns new length', () => {
