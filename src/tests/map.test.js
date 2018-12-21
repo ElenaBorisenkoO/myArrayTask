@@ -11,7 +11,7 @@ describe('tests for method map', () => {
   test('instance has not Own Property map', () => {
     const arr = new MyArray(1, 4, 0);
 
-    expect(arr.Object.prototype.hasOwnProperty.call('map')).toBeFalsy();
+    expect(Object.prototype.hasOwnProperty.call(arr, 'map')).toBeFalsy();
   });
 
   test('callback must include the originalArray as third argument', () => {

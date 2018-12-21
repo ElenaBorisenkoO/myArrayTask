@@ -19,7 +19,7 @@ describe('tests for constructor', () => {
   test('should have own property length', () => {
     const arr = new MyArray();
 
-    expect(arr.Object.prototype.hasOwnProperty.call('length')).toBeTruthy();
+    expect(Object.prototype.hasOwnProperty.call(arr, 'length')).toBeTruthy();
   });
   test('should has a constructor in MyArray ', () => {
     const arr = new MyArray();

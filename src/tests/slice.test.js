@@ -14,7 +14,7 @@ describe('tests for method slice', () => {
   });
 
   test('instance has not Own Property slice', () => {
-    expect(arr.Object.prototype.hasOwnProperty.call('slice')).toBeFalsy();
+    expect(Object.prototype.hasOwnProperty.call(arr, 'slice')).toBeFalsy();
   });
 
   test('method must return new array', () => {

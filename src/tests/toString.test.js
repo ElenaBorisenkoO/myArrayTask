@@ -14,7 +14,7 @@ describe('tests for method toString', () => {
   });
 
   test('instance has not Own Property toString', () => {
-    expect(arr.Object.prototype.hasOwnProperty.call('toString')).toBeFalsy();
+    expect(Object.prototype.hasOwnProperty.call(arr, 'toString')).toBeFalsy();
   });
 
   test('the toString result of empty arr must be an empty string and not undefined', () => {

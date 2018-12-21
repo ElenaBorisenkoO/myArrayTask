@@ -11,7 +11,7 @@ describe('tests for method filter', () => {
   test('instance has not Own Property filter', () => {
     const arr = new MyArray(1, 4, 0);
 
-    expect(arr.Object.prototype.hasOwnProperty.call('filter')).toBeFalsy();
+    expect(Object.prototype.hasOwnProperty.call(arr, 'filter')).toBeFalsy();
   });
 
   test('return value of no filter matches, returns empty array', () => {
