@@ -9,7 +9,7 @@ describe('tests for method push', () => {
   });
 
 
-  test.only('instance should have method push', () => {
+  test('instance should have method push', () => {
     expect(arr.push).toBeInstanceOf(Function);
   });
 

@@ -1,7 +1,7 @@
 import MyArray from '../index';
 
 describe('tests for method FROM', () => {
-  test.only('Class has static method FROM', () => {
+  test('Class has static method FROM', () => {
     expect(MyArray.from).toBeInstanceOf(Function);
   });
 

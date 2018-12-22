@@ -9,7 +9,7 @@ describe('tests for method slice', () => {
   });
 
 
-  test.only('instance has method slice', () => {
+  test('instance has method slice', () => {
     expect(arr.slice).toBeInstanceOf(Function);
   });
 

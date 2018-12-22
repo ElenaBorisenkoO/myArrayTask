@@ -38,11 +38,13 @@ MyArray.prototype.pop = function() {
   return x;
 };
 
-MyArray.prototype.forEach = function(...rest) {
-  if (arguments.length !== 0 && (typeof rest[0] === 'function')) {
-    for (let i = 0; i < this.elements.length; i++) {
-      rest[0](this.elements[i], i, this.elements);
-    }
+MyArray.prototype.forEach = function(callback, thisArg = this) {
+  if (typeof callback !== 'function') {
+    throw new TypeError();
+  }
+
+  for (let i = 0; i < this.length; i++) {
+    callback.call(thisArg, this[i], i, this);
   }
 };
 

@@ -9,7 +9,7 @@ describe('tests for method forEach', () => {
   });
 
 
-  test.only('has method forEach ', () => {
+  test('has method forEach ', () => {
     expect(arr.forEach).toBeInstanceOf(Function);
   });
 
