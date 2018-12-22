@@ -2,7 +2,7 @@ import MyArray from '../index';
 
 
 describe('tests for method map', () => {
-  test.only('instance has method map', () => {
+  test('instance has method map', () => {
     const arr = new MyArray(1, 4, 0);
 
     expect(arr.map).toBeInstanceOf(Function);

@@ -1,7 +1,7 @@
 import MyArray from '../index.js';
 
 describe('tests for constructor', () => {
-  test.only('should correct work with 0,1,2 ... n arguments(create 3 instance and check length and content)', () => {
+  test('should correct work with 0,1,2 ... n arguments(create 3 instance and check length and content)', () => {
     const arr1 = new MyArray();
     const arr2 = new MyArray(5);
     const arr3 = new MyArray(1, 2);

@@ -2,7 +2,7 @@ import MyArray from '../index';
 
 
 describe('tests for method filter', () => {
-  test.only('instance has method filter', () => {
+  test('instance has method filter', () => {
     const arr = new MyArray(1, 4, 0);
 
     expect(arr.filter).toBeInstanceOf(Function);

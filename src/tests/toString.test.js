@@ -9,7 +9,7 @@ describe('tests for method toString', () => {
   });
 
 
-  test.only('instance has method toString', () => {
+  test('instance has method toString', () => {
     expect(arr.toString).toBeInstanceOf(Function);
   });
 
