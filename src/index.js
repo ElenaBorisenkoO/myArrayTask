@@ -1,29 +1,24 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable init-declarations */
-/* eslint-disable prefer-rest-params */
-
-function MyArray() {
+function MyArray(...rest) {
   this.elements = [];
 
   for (let i = 0; i < arguments.length; i++) {
-    this.elements[i] = arguments[i];
+    this.elements[i] = rest[i];
   }
 }
 
-MyArray.prototype.push = function() {
+MyArray.prototype.push = function(...rest) {
   if (arguments.length !== 0) {
     const len = this.elements.length;
 
     for (let i = 0; i < arguments.length; i++) {
-      this.elements[len + i] = arguments[i];
+      this.elements[len + i] = rest[i];
     }
   }
   return this.elements.length;
 };
 
 MyArray.prototype.pop = function() {
-  // eslint-disable-next-line init-declarations
-  let x;
+  let x = this.elements[this.elements.length - 1];
 
   if (this.elements.length !== 0) {
     x = this.elements[this.elements.length - 1];
@@ -38,20 +33,20 @@ MyArray.prototype.pop = function() {
   return x;
 };
 
-MyArray.prototype.forEach = function() {
-  if (arguments.length !== 0 && (typeof arguments[0] === 'function')) {
+MyArray.prototype.forEach = function(...rest) {
+  if (arguments.length !== 0 && (typeof rest[0] === 'function')) {
     for (let i = 0; i < this.elements.length; i++) {
-      arguments[0](this.elements[i], i, this.elements);
+      rest[0](this.elements[i], i, this.elements);
     }
   }
 };
 
-MyArray.prototype.map = function() {
+MyArray.prototype.map = function(...rest) {
   const resultArr = [];
 
-  if (arguments.length !== 0 && (typeof arguments[0] === 'function')) {
+  if (arguments.length !== 0 && (typeof rest[0] === 'function')) {
     for (let i = 0; i < this.elements.length; i++) {
-      arguments[0](this.elements[i], i, this.elements);
+      rest[0](this.elements[i], i, this.elements);
       resultArr[i] = this.elements[i];
     }
   }
@@ -69,12 +64,12 @@ MyArray.prototype.toString = function() {
   return resultString;
 };
 
-MyArray.prototype.filter = function() {
+MyArray.prototype.filter = function(...rest) {
   const filterElements = [];
 
-  if (arguments.length !== 0 && (typeof arguments[0] === 'function')) {
+  if (arguments.length !== 0 && (typeof rest[0] === 'function')) {
     for (let i = 0; i < this.elements.length; i++) {
-      if (arguments[0](this.elements[i], i, this.elements)) {
+      if (rest[0](this.elements[i], i, this.elements)) {
         filterElements[i] = this.elements[i];
       }
     }
@@ -82,7 +77,7 @@ MyArray.prototype.filter = function() {
   return filterElements;
 };
 
-MyArray.prototype.reduce = function() {
+MyArray.prototype.reduce = function(...rest) {
   if (this.elements === undefined) {
     return undefined;
   }
@@ -91,22 +86,22 @@ MyArray.prototype.reduce = function() {
     return undefined;
   }
 
-  let accumulator;
+  let accumulator = rest[1];
 
-  if (arguments.length !== 0 && (typeof arguments[0] === 'function')) {
-    let start;
+  if (arguments.length !== 0 && (typeof rest[0] === 'function')) {
+    let start = 0;
 
-    if (arguments[1] !== undefined) {
-      accumulator = arguments[1];
+    if (rest[1] !== undefined) {
+      accumulator = rest[1];
       start = 0;
     } else {
       const dv = typeof this.elements[0] === 'object' ? '' : 0;
-      accumulator = arguments[0](dv, this.elements[0], 0, this.elements);
+      accumulator = rest[0](dv, this.elements[0], 0, this.elements);
       start = 1;
     }
 
     for (let i = start; i < this.elements.length; i++) {
-      accumulator = arguments[0](accumulator, this.elements[i], i, this.elements);
+      accumulator = rest[0](accumulator, this.elements[i], i, this.elements);
     }
   }
   return accumulator;
@@ -134,6 +129,7 @@ MyArray.from = function(elements, mapFunction) {
 };
 
 MyArray.prototype.sort = function(comparator) {
+  let comp = comparator;
   function defaultComparator(a, b) {
     const aString = a.toString();
     const bString = b.toString();
@@ -147,15 +143,15 @@ MyArray.prototype.sort = function(comparator) {
     }
   }
 
-  if (!(comparator !== undefined && typeof comparator === 'function')) {
-    comparator = defaultComparator;
+  if (!(comp !== undefined && typeof comp === 'function')) {
+    comp = defaultComparator;
   }
 
   let barrier = this.elements.length - 1;
 
   for (let i = 0; i < this.elements.length; i++) {
     for (let j = 0; j < barrier; j++) {
-      const result = comparator(this.elements[j], this.elements[j + 1]);
+      const result = comp(this.elements[j], this.elements[j + 1]);
 
       if (result > 0) {
         const temp = this.elements[j];
@@ -163,8 +159,7 @@ MyArray.prototype.sort = function(comparator) {
         this.elements[j + 1] = temp;
       }
     }
-    // eslint-disable-next-line no-plusplus
-    barrier--;
+    barrier -= 1;
   }
   return this.elements;
 };
