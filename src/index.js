@@ -48,14 +48,18 @@ MyArray.prototype.forEach = function(callback, thisArg = this) {
   }
 };
 
-MyArray.prototype.map = function(...rest) {
+MyArray.prototype.map = function(callback, thisArg = this) {
+  if (typeof callback !== 'function') {
+    throw new TypeError();
+  }
+
   const resultArr = new MyArray();
 
-  if (arguments.length !== 0 && (typeof rest[0] === 'function')) {
-    for (let i = 0; i < this.elements.length; i++) {
-      rest[0](this.elements[i], i, this.elements);
-      resultArr[i] = this.elements[i];
-    }
+  for (let i = 0; i < this.length; i++) {
+    const mapElement = callback.call(thisArg, this[i], i, this);
+
+    resultArr[i] = mapElement;
+    resultArr.length += 1;
   }
 
   return resultArr;
