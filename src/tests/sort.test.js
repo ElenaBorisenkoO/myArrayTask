@@ -2,7 +2,7 @@ import MyArray from '../index';
 
 
 describe('tests for method sort', () => {
-  test('instance has method sort', () => {
+  test.only('instance has method sort', () => {
     const arr = new MyArray(1, 4, 0);
 
     expect(arr.sort).toBeInstanceOf(Function);

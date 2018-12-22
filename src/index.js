@@ -26,17 +26,14 @@ MyArray.prototype.push = function(...rest) {
 };
 
 MyArray.prototype.pop = function() {
-  let x = this.elements[this.elements.length - 1];
+  const x = this[this.length - 1];
+  const newElements = new MyArray();
 
-  if (this.elements.length !== 0) {
-    x = this.elements[this.elements.length - 1];
-
-    const newelements = new MyArray();
-
-    for (let i = 0; i < this.elements.length - 1; i++) {
-      newelements[i] = this.elements[i];
+  if (this.length !== 0) {
+    for (let i = 0; i < this.length - 1; i++) {
+      newElements[i] = this[i];
     }
-    this.elements = newelements;
+    this.length -= 1;
   }
   return x;
 };
