@@ -1,201 +1,171 @@
-export default MyArray;
+/* eslint-disable no-param-reassign */
+/* eslint-disable init-declarations */
+/* eslint-disable prefer-rest-params */
 
-function myArray(){
+function MyArray() {
+  this.elements = [];
 
-	this.elements = [];
-
-	for(var i=0; i<arguments.length; i++){
-
-		this.elements[i]=arguments[i];
-	}
+  for (let i = 0; i < arguments.length; i++) {
+    this.elements[i] = arguments[i];
+  }
 }
 
-myArray.prototype.push = function(){
+MyArray.prototype.push = function() {
+  if (arguments.length !== 0) {
+    const len = this.elements.length;
 
-	if(arguments.length!==0){
-
-		var len = this.elements.length;
-
-		for(let i=0; i<arguments.length; i++){
-			this.elements[len+i]=arguments[i];
-		}
-	}
-	return this.elements.length;
+    for (let i = 0; i < arguments.length; i++) {
+      this.elements[len + i] = arguments[i];
+    }
+  }
+  return this.elements.length;
 };
 
-myArray.prototype.pop = function(){
+MyArray.prototype.pop = function() {
+  // eslint-disable-next-line init-declarations
+  let x;
 
-	var x;
+  if (this.elements.length !== 0) {
+    x = this.elements[this.elements.length - 1];
 
-	if(this.elements.length!==0){
-		x = this.elements[this.elements.length-1];
+    const newelements = [];
 
-		var newelements = [];
+    for (let i = 0; i < this.elements.length - 1; i++) {
+      newelements[i] = this.elements[i];
+    }
+    this.elements = newelements;
+  }
+  return x;
+};
 
-		for (let i =0; i<this.elements.length-1; i++){
-			newelements[i]=this.elements[i];
-		}
-		this.elements=newelements;
-	}
-	return x;
+MyArray.prototype.forEach = function() {
+  if (arguments.length !== 0 && (typeof arguments[0] === 'function')) {
+    for (let i = 0; i < this.elements.length; i++) {
+      arguments[0](this.elements[i], i, this.elements);
+    }
+  }
+};
 
-}
+MyArray.prototype.map = function() {
+  const resultArr = [];
 
-myArray.prototype.forEach = function(){
+  if (arguments.length !== 0 && (typeof arguments[0] === 'function')) {
+    for (let i = 0; i < this.elements.length; i++) {
+      arguments[0](this.elements[i], i, this.elements);
+      resultArr[i] = this.elements[i];
+    }
+  }
 
-			//if(callback !== undefined && (typeof callback ==='function')){
+  return resultArr;
+};
 
-				if( arguments.length!==0 && (typeof arguments[0]==='function')){
+MyArray.prototype.toString = function() {
+  let resultString = ' ';
 
-					for(let i=0; i<this.elements.length; i++){
+  for (let i = 0; i < this.elements.length; i++) {
+    resultString += this.elements[i];
+  }
 
-						arguments[0](this.elements[i],i,this.elements);
+  return resultString;
+};
 
-					//callback(this.elements[i],i,this.elements);
-				}
-			}
-		}
+MyArray.prototype.filter = function() {
+  const filterElements = [];
 
-		
+  if (arguments.length !== 0 && (typeof arguments[0] === 'function')) {
+    for (let i = 0; i < this.elements.length; i++) {
+      if (arguments[0](this.elements[i], i, this.elements)) {
+        filterElements[i] = this.elements[i];
+      }
+    }
+  }
+  return filterElements;
+};
 
+MyArray.prototype.reduce = function() {
+  if (this.elements === undefined) {
+    return undefined;
+  }
 
-		myArray.prototype.map = function(){
-			var resultArr=[];
-			if(arguments.length!==0 && (typeof arguments[0]==='function')){
+  if (this.elements.length === 0) {
+    return undefined;
+  }
 
-				for(let i=0; i<this.elements.length; i++){
-					
-					arguments[0](this.elements[i],i,this.elements);
-					resultArr[i] = this.elements[i];
-					
-				}
+  let accumulator;
 
-			}
+  if (arguments.length !== 0 && (typeof arguments[0] === 'function')) {
+    let start;
 
-			return resultArr;
-		}
+    if (arguments[1] !== undefined) {
+      accumulator = arguments[1];
+      start = 0;
+    } else {
+      const dv = typeof this.elements[0] === 'object' ? '' : 0;
+      accumulator = arguments[0](dv, this.elements[0], 0, this.elements);
+      start = 1;
+    }
 
+    for (let i = start; i < this.elements.length; i++) {
+      accumulator = arguments[0](accumulator, this.elements[i], i, this.elements);
+    }
+  }
+  return accumulator;
+};
 
-		myArray.prototype.toString = function(){
+const reducer = (acc, item) => acc + item;
 
-			var resultString =" ";
+MyArray.from = function(elements, mapFunction) {
+  if (elements === undefined || elements === null) {
+    throw new Error('first argument not defined');
+  }
 
-			for(let i =0; i<this.elements.length; i++){
+  if (!(typeof elements[Symbol.iterator] === 'function')) {
+    throw new Error('arrayLike element is not iterable');
+  }
 
-				resultString+= this.elements[i];
-			}
+  const applyMapFunction = (mapFunction !== undefined && typeof mapFunction === 'function');
 
-			return resultString;
-		}
+  const newInstance = new MyArray();
 
+  for (let i = 0; i < elements.length; i++) {
+    newInstance[i] = applyMapFunction ? mapFunction(elements[i]) : elements[i];
+  }
+  return newInstance;
+};
 
+MyArray.prototype.sort = function(comparator) {
+  function defaultComparator(a, b) {
+    const aString = a.toString();
+    const bString = b.toString();
 
-		myArray.prototype.filter = function(){
+    if (aString === bString) {
+      return 0;
+    } else if (aString < bString) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
 
-			var filterElements=[];
+  if (!(comparator !== undefined && typeof comparator === 'function')) {
+    comparator = defaultComparator;
+  }
 
-			if(arguments.length!==0 && (typeof arguments[0]==='function')){
+  let barrier = this.elements.length - 1;
 
-				for(let i=0; i<this.elements.length; i++){
+  for (let i = 0; i < this.elements.length; i++) {
+    for (let j = 0; j < barrier; j++) {
+      const result = comparator(this.elements[j], this.elements[j + 1]);
 
-					if(arguments[0](this.elements[i],i,this.elements)){
-						filterElements[i] = this.elements[i];
-					}		     
-				}		 	
-			}
-			return filterElements;
-		}
-
-
-
-
-		myArray.prototype.reduce = function () {
-                //if array is undefined or array is empty we shoudn't do anything
-                if (this.elements === undefined) {
-                	return undefined;
-                }
-                if (this.elements.length === 0) {
-                	return undefined;
-                }
-
-                //if array contains at least 1 elem
-                var accumulator;
-                if (arguments.length !== 0 && (typeof arguments[0] === 'function')) {
-                	let start;
-                	if (arguments[1] !== undefined) {
-                        //passing init value
-                        accumulator = arguments[1];
-                        start = 0;
-                    } else {
-                        //default valu = 1st element in array
-                        let dv = typeof this.elements[0] === 'object' ? "" : 0;
-                        accumulator = arguments[0](dv, this.elements[0], 0, this.elements);
-                        start = 1;
-                    }
-
-                    for (let i = start; i < this.elements.length; i++) {
-                    	accumulator = arguments[0](accumulator, this.elements[i], i, this.elements);
-                    }
-                }
-                return accumulator;
-            };
-
-            let reducer = (acc, item) => acc + item;
-
-
-
-
-            myArray.from = function (elements, mapFunction) {
-                //check if arrayLike element present
-                if (elements === undefined || elements === null) {
-                	throw new Error("first argument not defined");
-                }
-
-                //check if element is iterable
-                if (!(typeof elements[Symbol.iterator] === 'function')) {
-                	throw new Error("arrayLike element is not iterable");
-                }
-
-                let applyMapFunction = (mapFunction !== undefined && typeof mapFunction === 'function');
-
-                var newInstance = new myArray();
-                
-                for (let i = 0; i < elements.length; i++) {
-                	newInstance[i] = applyMapFunction ? mapFunction(elements[i]) : elements[i];
-                }
-                return newInstance;
-            };
-
-          
-            myArray.prototype.sort = function (comparator) {
-
-            	function defaultComparator(a, b) {
-            		let aString = a.toString();
-            		let bString = b.toString();
-            		if (aString === bString) {
-            			return 0;
-            		} else if (aString < bString) {
-            			return -1;
-            		} else {
-            			return 1;
-            		}
-            	}
-
-            	if (!(comparator !== undefined && typeof comparator === 'function')) {
-            		comparator = defaultComparator;
-            	}
-
-            	let barrier = this.elements.length - 1;
-            	for (let i = 0; i < this.elements.length; i++) {
-            		for (let j = 0; j < barrier; j++) {
-            			let result = comparator(this.elements[j], this.elements[j + 1]);
-            			if (result > 0) {
-            				let temp = this.elements[j];
-            				this.elements[j] = this.elements[j + 1];
-            				this.elements[j + 1] = temp;
-            			}
-            		}
-            		barrier--;
-            	}
-                return this.elements;
-            };
+      if (result > 0) {
+        const temp = this.elements[j];
+        this.elements[j] = this.elements[j + 1];
+        this.elements[j + 1] = temp;
+      }
+    }
+    // eslint-disable-next-line no-plusplus
+    barrier--;
+  }
+  return this.elements;
+};
+export default MyArray;
