@@ -66,10 +66,14 @@ MyArray.prototype.map = function(callback, thisArg = this) {
 };
 
 MyArray.prototype.toString = function() {
-  let resultString = ' ';
+  let resultString = '';
 
-  for (let i = 0; i < this.elements.length; i++) {
-    resultString += this.elements[i];
+  for (let i = 0; i < this.length; i++) {
+    if (i !== this.length - 1) {
+      resultString += `${this[i]}${','}`;
+    } else {
+      resultString += this[i];
+    }
   }
 
   return resultString;
