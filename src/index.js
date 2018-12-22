@@ -79,14 +79,12 @@ MyArray.prototype.toString = function() {
   return resultString;
 };
 
-MyArray.prototype.filter = function(...rest) {
+MyArray.prototype.filter = function(callback, thisArg) {
   const filterElements = new MyArray();
 
-  if (arguments.length !== 0 && (typeof rest[0] === 'function')) {
-    for (let i = 0; i < this.elements.length; i++) {
-      if (rest[0](this.elements[i], i, this.elements)) {
-        filterElements[i] = this.elements[i];
-      }
+  for (let i = 0; i < this.length; i++) {
+    if (callback.call(thisArg, this[i], i, this)) {
+      filterElements.push(this[i]);
     }
   }
   return filterElements;
