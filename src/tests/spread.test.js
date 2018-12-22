@@ -2,7 +2,7 @@ import MyArray from '../index';
 
 
 describe('tests for spread', () => {
-  test('instance has method [Symbol.iterator]', () => {
+  test.only('instance has method [Symbol.iterator]', () => {
     const arr = new MyArray(1, 2, 3);
 
     expect(arr[Symbol.iterator]).toBeInstanceOf(Function);

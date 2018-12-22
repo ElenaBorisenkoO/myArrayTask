@@ -7,7 +7,7 @@ describe('tests for instance', () => {
     arr = new MyArray(1, 4, 0, 'orange', { a: 'name', b: 'user' });
   });
 
-  test('The instance must return a specific value for a particular array index.', () => {
+  test.only('The instance must return a specific value for a particular array index.', () => {
     expect(arr[3]).toBe('orange');
   });
 
