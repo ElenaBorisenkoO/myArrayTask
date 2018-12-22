@@ -1,20 +1,28 @@
 function MyArray(...rest) {
-  this.elements = [];
+  this.length = null;
 
-  for (let i = 0; i < arguments.length; i++) {
-    this.elements[i] = rest[i];
+  if (rest.length === 1 && typeof rest[0] === 'number') {
+    this.length = rest[0];
+  } else {
+    this.length = rest.length;
+
+    for (let i = 0; i < rest.length; i++) {
+      this[i] = rest[i];
+    }
   }
 }
 
 MyArray.prototype.push = function(...rest) {
-  if (arguments.length !== 0) {
-    const len = this.elements.length;
+  if (rest.length !== 0) {
+    const len = rest.length;
 
-    for (let i = 0; i < arguments.length; i++) {
-      this.elements[len + i] = rest[i];
+    for (let i = 0; i < len; i++) {
+      const currentLen = this.length;
+      this[currentLen] = rest[i];
+      this.length += 1;
     }
   }
-  return this.elements.length;
+  return this.length;
 };
 
 MyArray.prototype.pop = function() {
@@ -23,7 +31,7 @@ MyArray.prototype.pop = function() {
   if (this.elements.length !== 0) {
     x = this.elements[this.elements.length - 1];
 
-    const newelements = [];
+    const newelements = new MyArray();
 
     for (let i = 0; i < this.elements.length - 1; i++) {
       newelements[i] = this.elements[i];
@@ -42,7 +50,7 @@ MyArray.prototype.forEach = function(...rest) {
 };
 
 MyArray.prototype.map = function(...rest) {
-  const resultArr = [];
+  const resultArr = new MyArray();
 
   if (arguments.length !== 0 && (typeof rest[0] === 'function')) {
     for (let i = 0; i < this.elements.length; i++) {
@@ -65,7 +73,7 @@ MyArray.prototype.toString = function() {
 };
 
 MyArray.prototype.filter = function(...rest) {
-  const filterElements = [];
+  const filterElements = new MyArray();
 
   if (arguments.length !== 0 && (typeof rest[0] === 'function')) {
     for (let i = 0; i < this.elements.length; i++) {
@@ -109,7 +117,7 @@ MyArray.prototype.reduce = function(...rest) {
 
 const reducer = (acc, item) => acc + item;
 
-MyArray.from = function(elements, mapFunction) {
+MyArray.prototype.from = function(elements, mapFunction) {
   if (elements === undefined || elements === null) {
     throw new Error('first argument not defined');
   }
