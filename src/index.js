@@ -27,11 +27,11 @@ MyArray.prototype.push = function(...rest) {
 
 MyArray.prototype.pop = function() {
   const x = this[this.length - 1];
-  const newelements = new MyArray();
+  const newElements = new MyArray();
 
   if (this.length !== 0) {
     for (let i = 0; i < this.length - 1; i++) {
-      newelements[i] = this[i];
+      newElements[i] = this[i];
     }
     this.length -= 1;
   }
