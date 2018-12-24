@@ -91,30 +91,32 @@ MyArray.prototype.filter = function(callback, thisArg) {
 };
 
 MyArray.prototype.reduce = function(...rest) {
-  if (this.elements === undefined) {
+
+
+  if (this === undefined) {
     return undefined;
   }
 
-  if (this.elements.length === 0) {
+  if (this.length === 0) {
     return undefined;
   }
 
   let accumulator = rest[1];
 
-  if (arguments.length !== 0 && (typeof rest[0] === 'function')) {
+  if (rest.length !== 0 && (typeof rest[0] === 'function')) {
     let start = 0;
 
     if (rest[1] !== undefined) {
       accumulator = rest[1];
       start = 0;
     } else {
-      const dv = typeof this.elements[0] === 'object' ? '' : 0;
-      accumulator = rest[0](dv, this.elements[0], 0, this.elements);
+      const dv = typeof this[0] === 'object' ? '' : 0;
+      accumulator = rest[0](dv, this[0], 0, this);
       start = 1;
     }
 
-    for (let i = start; i < this.elements.length; i++) {
-      accumulator = rest[0](accumulator, this.elements[i], i, this.elements);
+    for (let i = start; i < this.length; i++) {
+      accumulator = rest[0](accumulator, this[i], i, this);
     }
   }
   return accumulator;
@@ -122,7 +124,7 @@ MyArray.prototype.reduce = function(...rest) {
 
 const reducer = (acc, item) => acc + item;
 
-MyArray.prototype.from = function(elements, mapFunction) {
+MyArray.from = function(elements, mapFunction, thisArg = this) {
   if (elements === undefined || elements === null) {
     throw new Error('first argument not defined');
   }
@@ -136,7 +138,8 @@ MyArray.prototype.from = function(elements, mapFunction) {
   const newInstance = new MyArray();
 
   for (let i = 0; i < elements.length; i++) {
-    newInstance[i] = applyMapFunction ? mapFunction(elements[i]) : elements[i];
+    newInstance[i] = applyMapFunction ? mapFunction.call(thisArg, elements[i], i, elements) : elements[i];
+    newInstance.length += 1;
   }
   return newInstance;
 };
