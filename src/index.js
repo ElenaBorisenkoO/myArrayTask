@@ -211,5 +211,18 @@ MyArray.prototype[Symbol.iterator] = function() {
   };
 };
 
+MyArray.prototype.find = function(callback, thisArg = this) {
+  if (typeof callback !== 'function') {
+    throw new TypeError('Callback is not a fuction');
+  }
+
+  for (let i = 0; i < this.length; i++) {
+    if (callback.call(thisArg, this[i], i, this) === true) {
+      return this[i];
+    }
+  }
+  return undefined;
+};
+
 
 export default MyArray;
