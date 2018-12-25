@@ -239,7 +239,7 @@ MyArray.prototype.slice = function(begin, end) {
   }
 
 
-  for (let i = firstSlicedElem; i < lastSlicedElem; i++ ) {
+  for (let i = firstSlicedElem; i < lastSlicedElem; i++) {
     slicedArray.push(this[i]);
   }
 
