@@ -91,38 +91,39 @@ MyArray.prototype.filter = function(callback, thisArg) {
 };
 
 MyArray.prototype.reduce = function(...rest) {
-  if (this.elements === undefined) {
+  if (typeof rest[0] !== 'function') {
+    throw new TypeError('Callback is not a function');
+  }
+
+  if (this === undefined) {
     return undefined;
   }
 
-  if (this.elements.length === 0) {
-    return undefined;
-  }
-
-  let accumulator = rest[1];
-
-  if (arguments.length !== 0 && (typeof rest[0] === 'function')) {
-    let start = 0;
-
-    if (rest[1] !== undefined) {
-      accumulator = rest[1];
-      start = 0;
+  if (this.length === 0) {
+    if (rest[1] === undefined) {
+      throw new TypeError('Initialvalue is not defined');
     } else {
-      const dv = typeof this.elements[0] === 'object' ? '' : 0;
-      accumulator = rest[0](dv, this.elements[0], 0, this.elements);
-      start = 1;
+      return rest[1];
     }
+  }
 
-    for (let i = start; i < this.elements.length; i++) {
-      accumulator = rest[0](accumulator, this.elements[i], i, this.elements);
-    }
+  let accumulator = rest[1] !== undefined ? rest[1] : this[0];
+
+  let start = 1;
+
+  if (rest[1] !== undefined) {
+    start = 0;
+  } else {
+    start = 1;
+  }
+
+  for (let i = start; i < this.length; i++) {
+    accumulator = rest[0](accumulator, this[i], i, this);
   }
   return accumulator;
 };
 
-const reducer = (acc, item) => acc + item;
-
-MyArray.prototype.from = function(elements, mapFunction) {
+MyArray.from = function(elements, mapFunction, thisArg = this) {
   if (elements === undefined || elements === null) {
     throw new Error('first argument not defined');
   }
@@ -136,14 +137,22 @@ MyArray.prototype.from = function(elements, mapFunction) {
   const newInstance = new MyArray();
 
   for (let i = 0; i < elements.length; i++) {
-    newInstance[i] = applyMapFunction ? mapFunction(elements[i]) : elements[i];
+    newInstance[i] = applyMapFunction ? mapFunction.call(thisArg, elements[i], i, elements) : elements[i];
+    newInstance.length += 1;
   }
   return newInstance;
 };
 
 MyArray.prototype.sort = function(comparator) {
-  let comp = comparator;
-  function defaultComparator(a, b) {
+  let comp = function(a, b) {
+    if (a === undefined || b === undefined) {
+      if (a === undefined)
+      { return 1; }
+
+      if (b === undefined)
+      { return -1; }
+    }
+
     const aString = a.toString();
     const bString = b.toString();
 
@@ -154,26 +163,30 @@ MyArray.prototype.sort = function(comparator) {
     } else {
       return 1;
     }
+  };
+
+  if (comparator !== undefined) {
+    if (typeof comparator !== 'function') {
+      throw new TypeError();
+    } else {
+      comp = comparator;
+    }
   }
 
-  if (!(comp !== undefined && typeof comp === 'function')) {
-    comp = defaultComparator;
-  }
+  let barrier = this.length - 1;
 
-  let barrier = this.elements.length - 1;
-
-  for (let i = 0; i < this.elements.length; i++) {
+  for (let i = 0; i < this.length; i++) {
     for (let j = 0; j < barrier; j++) {
-      const result = comp(this.elements[j], this.elements[j + 1]);
+      const result = comp(this[j], this[j + 1]);
 
       if (result > 0) {
-        const temp = this.elements[j];
-        this.elements[j] = this.elements[j + 1];
-        this.elements[j + 1] = temp;
+        const temp = this[j];
+        this[j] = this[j + 1];
+        this[j + 1] = temp;
       }
     }
     barrier -= 1;
   }
-  return this.elements;
+  return this;
 };
 export default MyArray;
