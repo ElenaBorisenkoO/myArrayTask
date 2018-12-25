@@ -91,8 +91,6 @@ MyArray.prototype.filter = function(callback, thisArg) {
 };
 
 MyArray.prototype.reduce = function(...rest) {
-
-
   if (this === undefined) {
     return undefined;
   }
@@ -138,6 +136,7 @@ MyArray.from = function(elements, mapFunction, thisArg = this) {
   const newInstance = new MyArray();
 
   for (let i = 0; i < elements.length; i++) {
+
     newInstance[i] = applyMapFunction ? mapFunction.call(thisArg, elements[i], i, elements) : elements[i];
     newInstance.length += 1;
   }
@@ -145,8 +144,15 @@ MyArray.from = function(elements, mapFunction, thisArg = this) {
 };
 
 MyArray.prototype.sort = function(comparator) {
-  let comp = comparator;
-  function defaultComparator(a, b) {
+  let comp = function(a, b) {
+    if (a === undefined || b === undefined) {
+      if (a === undefined)
+      { return 1; }
+
+      if (b === undefined)
+      { return -1; }
+    }
+
     const aString = a.toString();
     const bString = b.toString();
 
@@ -157,26 +163,30 @@ MyArray.prototype.sort = function(comparator) {
     } else {
       return 1;
     }
+  };
+
+  if (comparator !== undefined) {
+    if (typeof comparator !== 'function') {
+      throw new TypeError();
+    } else {
+      comp = comparator;
+    }
   }
 
-  if (!(comp !== undefined && typeof comp === 'function')) {
-    comp = defaultComparator;
-  }
+  let barrier = this.length - 1;
 
-  let barrier = this.elements.length - 1;
-
-  for (let i = 0; i < this.elements.length; i++) {
+  for (let i = 0; i < this.length; i++) {
     for (let j = 0; j < barrier; j++) {
-      const result = comp(this.elements[j], this.elements[j + 1]);
+      const result = comp(this[j], this[j + 1]);
 
       if (result > 0) {
-        const temp = this.elements[j];
-        this.elements[j] = this.elements[j + 1];
-        this.elements[j + 1] = temp;
+        const temp = this[j];
+        this[j] = this[j + 1];
+        this[j + 1] = temp;
       }
     }
     barrier -= 1;
   }
-  return this.elements;
+  return this;
 };
 export default MyArray;
