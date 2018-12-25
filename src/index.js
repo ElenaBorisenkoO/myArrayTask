@@ -189,4 +189,27 @@ MyArray.prototype.sort = function(comparator) {
   }
   return this;
 };
+
+MyArray.prototype[Symbol.iterator] = function() {
+  let current = 0;
+  const that = this;
+
+  return {
+    next() {
+      if (current < that.length) {
+        current += 1;
+        return {
+          value: that[current - 1],
+          done: false
+        };
+      } else {
+        return {
+          done: true
+        };
+      }
+    }
+  };
+};
+
+
 export default MyArray;
