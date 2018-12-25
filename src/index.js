@@ -224,5 +224,27 @@ MyArray.prototype.find = function(callback, thisArg = this) {
   return undefined;
 };
 
+MyArray.prototype.slice = function(begin, end) {
+  const slicedArray = new MyArray();
+
+  let firstSlicedElem = begin ? begin : 0;
+  let lastSlicedElem = end ? end : this.length;
+
+  if (begin < 0) {
+    firstSlicedElem = this.length + begin;
+  }
+
+  if (end < 0) {
+    lastSlicedElem = this.length + end;
+  }
+
+
+  for (let i = firstSlicedElem; i < lastSlicedElem; i++ ) {
+    slicedArray.push(this[i]);
+  }
+
+  return slicedArray;
+};
+
 
 export default MyArray;
