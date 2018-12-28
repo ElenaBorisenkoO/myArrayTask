@@ -48,6 +48,7 @@ MyArray.prototype.forEach = function(callback, thisArg = this) {
   }
 };
 
+
 MyArray.prototype.map = function(callback, thisArg = this) {
   if (typeof callback !== 'function') {
     throw new TypeError();
@@ -87,6 +88,7 @@ MyArray.prototype.filter = function(callback, thisArg) {
       filterElements.push(this[i]);
     }
   }
+
   return filterElements;
 };
 
@@ -140,6 +142,7 @@ MyArray.from = function(elements, mapFunction, thisArg = this) {
     newInstance[i] = applyMapFunction ? mapFunction.call(thisArg, elements[i], i, elements) : elements[i];
     newInstance.length += 1;
   }
+
   return newInstance;
 };
 
@@ -248,3 +251,4 @@ MyArray.prototype.slice = function(begin, end) {
 
 
 export default MyArray;
+
