@@ -26,7 +26,8 @@ MyArray.prototype.push = function(...rest) {
 };
 
 MyArray.prototype.pop = function() {
-  const x = this[this.length - 1];
+  const resultElement = this[this.length - 1];
+
   const newElements = new MyArray();
 
   if (this.length !== 0) {
@@ -35,7 +36,7 @@ MyArray.prototype.pop = function() {
     }
     this.length -= 1;
   }
-  return x;
+  return resultElement;
 };
 
 MyArray.prototype.forEach = function(callback, thisArg = this) {
