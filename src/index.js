@@ -17,8 +17,8 @@ MyArray.prototype.push = function(...rest) {
     const len = rest.length;
 
     for (let i = 0; i < len; i++) {
-      const currentLen = this.length;
-      this[currentLen] = rest[i];
+      const currentLength = this.length;
+      this[currentLength] = rest[i];
       this.length += 1;
     }
   }
@@ -26,7 +26,8 @@ MyArray.prototype.push = function(...rest) {
 };
 
 MyArray.prototype.pop = function() {
-  const x = this[this.length - 1];
+  const resultElement = this[this.length - 1];
+
   const newElements = new MyArray();
 
   if (this.length !== 0) {
@@ -35,12 +36,12 @@ MyArray.prototype.pop = function() {
     }
     this.length -= 1;
   }
-  return x;
+  return resultElement;
 };
 
 MyArray.prototype.forEach = function(callback, thisArg = this) {
   if (typeof callback !== 'function') {
-    throw new TypeError();
+    throw new TypeError('Carefully! Callback is not a function!');
   }
 
   for (let i = 0; i < this.length; i++) {
@@ -48,9 +49,10 @@ MyArray.prototype.forEach = function(callback, thisArg = this) {
   }
 };
 
+
 MyArray.prototype.map = function(callback, thisArg = this) {
   if (typeof callback !== 'function') {
-    throw new TypeError();
+    throw new TypeError('Carefully! Callback is not a function!');
   }
 
   const resultArr = new MyArray();
@@ -87,6 +89,7 @@ MyArray.prototype.filter = function(callback, thisArg) {
       filterElements.push(this[i]);
     }
   }
+
   return filterElements;
 };
 
@@ -140,18 +143,17 @@ MyArray.from = function(elements, mapFunction, thisArg = this) {
     newInstance[i] = applyMapFunction ? mapFunction.call(thisArg, elements[i], i, elements) : elements[i];
     newInstance.length += 1;
   }
+
   return newInstance;
 };
 
 MyArray.prototype.sort = function(comparator) {
   let comp = function(a, b) {
-    if (a === undefined || b === undefined) {
-      if (a === undefined)
-      { return 1; }
+    if (a === undefined)
+    { return 1; }
 
-      if (b === undefined)
-      { return -1; }
-    }
+    if (b === undefined)
+    { return -1; }
 
     const aString = a.toString();
     const bString = b.toString();
@@ -216,7 +218,9 @@ MyArray.prototype.find = function(callback, thisArg = this) {
     throw new TypeError('Callback is not a fuction');
   }
 
-  for (let i = 0; i < this.length; i++) {
+  const { length } = this;
+
+  for (let i = 0; i < length; i++) {
     if (callback.call(thisArg, this[i], i, this) === true) {
       return this[i];
     }
@@ -248,3 +252,4 @@ MyArray.prototype.slice = function(begin, end) {
 
 
 export default MyArray;
+
