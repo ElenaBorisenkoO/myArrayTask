@@ -41,7 +41,7 @@ MyArray.prototype.pop = function() {
 
 MyArray.prototype.forEach = function(callback, thisArg = this) {
   if (typeof callback !== 'function') {
-    throw new TypeError();
+    throw new TypeError('Carefully! Callback is not a function!');
   }
 
   for (let i = 0; i < this.length; i++) {
@@ -52,7 +52,7 @@ MyArray.prototype.forEach = function(callback, thisArg = this) {
 
 MyArray.prototype.map = function(callback, thisArg = this) {
   if (typeof callback !== 'function') {
-    throw new TypeError();
+    throw new TypeError('Carefully! Callback is not a function!');
   }
 
   const resultArr = new MyArray();
