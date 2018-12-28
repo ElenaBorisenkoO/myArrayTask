@@ -149,13 +149,11 @@ MyArray.from = function(elements, mapFunction, thisArg = this) {
 
 MyArray.prototype.sort = function(comparator) {
   let comp = function(a, b) {
-    if (a === undefined || b === undefined) {
-      if (a === undefined)
-      { return 1; }
+    if (a === undefined)
+    { return 1; }
 
-      if (b === undefined)
-      { return -1; }
-    }
+    if (b === undefined)
+    { return -1; }
 
     const aString = a.toString();
     const bString = b.toString();
