@@ -17,8 +17,8 @@ MyArray.prototype.push = function(...rest) {
     const len = rest.length;
 
     for (let i = 0; i < len; i++) {
-      const currentLen = this.length;
-      this[currentLen] = rest[i];
+      const currentLength = this.length;
+      this[currentLength] = rest[i];
       this.length += 1;
     }
   }
