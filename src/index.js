@@ -218,7 +218,9 @@ MyArray.prototype.find = function(callback, thisArg = this) {
     throw new TypeError('Callback is not a fuction');
   }
 
-  for (let i = 0; i < this.length; i++) {
+  const { length } = this;
+
+  for (let i = 0; i < length; i++) {
     if (callback.call(thisArg, this[i], i, this) === true) {
       return this[i];
     }
