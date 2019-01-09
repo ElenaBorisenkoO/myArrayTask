@@ -1,6 +1,4 @@
 function MyArray(...rest) {
-  this.length = null;
-
   if (rest.length === 1 && typeof rest[0] === 'number') {
     this.length = rest[0];
   } else {
@@ -14,9 +12,7 @@ function MyArray(...rest) {
 
 MyArray.prototype.push = function(...rest) {
   if (rest.length !== 0) {
-    const len = rest.length;
-
-    for (let i = 0; i < len; i++) {
+    for (let i = 0; i < rest.length; i++) {
       const currentLength = this.length;
       this[currentLength] = rest[i];
       this.length += 1;
@@ -28,9 +24,9 @@ MyArray.prototype.push = function(...rest) {
 MyArray.prototype.pop = function() {
   const resultElement = this[this.length - 1];
 
-  const newElements = new MyArray();
-
   if (this.length !== 0) {
+    const newElements = new MyArray();
+
     for (let i = 0; i < this.length - 1; i++) {
       newElements[i] = this[i];
     }
@@ -70,12 +66,11 @@ MyArray.prototype.map = function(callback, thisArg = this) {
 MyArray.prototype.toString = function() {
   let resultString = '';
 
-  for (let i = 0; i < this.length; i++) {
-    if (i !== this.length - 1) {
-      resultString += `${this[i]}${','}`;
-    } else {
-      resultString += this[i];
+  if (this.length > 0) {
+    for (let i = 0; i < this.length - 1; i++) {
+      resultString += `${this[i]},`;
     }
+    resultString += `${this[this.length - 1]}`;
   }
 
   return resultString;
@@ -86,43 +81,29 @@ MyArray.prototype.filter = function(callback, thisArg) {
 
   for (let i = 0; i < this.length; i++) {
     if (callback.call(thisArg, this[i], i, this)) {
-      filterElements.push(this[i]);
+      filterElements[filterElements.length] = this[i];
+      filterElements.length += 1;
     }
   }
 
   return filterElements;
 };
 
-MyArray.prototype.reduce = function(...rest) {
-  if (typeof rest[0] !== 'function') {
-    throw new TypeError('Callback is not a function');
+MyArray.prototype.reduce = function(callback, initialValue) {
+  if (this.length === 0 && !initialValue) {
+    throw new TypeError('MyArray.prototype.reduce called on null or undefined');
   }
 
-  if (this === undefined) {
-    return undefined;
+  if (this.length === 0 && initialValue) {
+    return initialValue;
   }
 
-  if (this.length === 0) {
-    if (rest[1] === undefined) {
-      throw new TypeError('Initialvalue is not defined');
-    } else {
-      return rest[1];
-    }
+  let accumulator = initialValue === undefined ? this[0] : callback(initialValue, this[0], 0, this);
+
+  for (let i = 1; i < this.length; i++) {
+    accumulator = callback(accumulator, this[i], i, this);
   }
 
-  let accumulator = rest[1] !== undefined ? rest[1] : this[0];
-
-  let start = 1;
-
-  if (rest[1] !== undefined) {
-    start = 0;
-  } else {
-    start = 1;
-  }
-
-  for (let i = start; i < this.length; i++) {
-    accumulator = rest[0](accumulator, this[i], i, this);
-  }
   return accumulator;
 };
 
@@ -218,9 +199,7 @@ MyArray.prototype.find = function(callback, thisArg = this) {
     throw new TypeError('Callback is not a fuction');
   }
 
-  const { length } = this;
-
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < this.length; i++) {
     if (callback.call(thisArg, this[i], i, this) === true) {
       return this[i];
     }
@@ -231,25 +210,36 @@ MyArray.prototype.find = function(callback, thisArg = this) {
 MyArray.prototype.slice = function(begin, end) {
   const slicedArray = new MyArray();
 
-  let firstSlicedElem = begin ? begin : 0;
-  let lastSlicedElem = end ? end : this.length;
+  let from = 0;
+  let to = this.length;
 
-  if (begin < 0) {
-    firstSlicedElem = this.length + begin;
+  if (begin > this.length) {
+    return slicedArray;
+  }
+
+  if (begin > 0) {
+    from = begin;
+  }
+
+  if (begin < 0 && Math.abs(begin) < this.length) {
+    from = this.length + begin;
   }
 
   if (end < 0) {
-    lastSlicedElem = this.length + end;
+    to = this.length + end;
   }
 
+  if (end >= 0 && end <= this.length) {
+    to = end;
+  }
 
-  for (let i = firstSlicedElem; i < lastSlicedElem; i++) {
+  for (let i = from; i < to; i++) {
     slicedArray.push(this[i]);
   }
+
 
   return slicedArray;
 };
 
 
 export default MyArray;
-
