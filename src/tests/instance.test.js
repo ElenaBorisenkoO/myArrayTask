@@ -1,4 +1,4 @@
-import MyArray from '../index';
+import MyArray from '../main';
 
 describe('tests for instance', () => {
   let arr = new MyArray(1, 4, 0, 'orange', { a: 'name', b: 'user' });

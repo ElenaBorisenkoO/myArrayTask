@@ -1,4 +1,4 @@
-import MyArray from '../index';
+import MyArray from '../main';
 
 
 describe('tests for method sort', () => {
