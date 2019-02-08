@@ -117,14 +117,12 @@ MyArray.from = function(elements, mapFunction, thisArg = this) {
   }
 
   const applyMapFunction = (mapFunction !== undefined && typeof mapFunction === 'function');
-
   const newInstance = new MyArray();
 
   for (let i = 0; i < elements.length; i++) {
     newInstance[i] = applyMapFunction ? mapFunction.call(thisArg, elements[i], i, elements) : elements[i];
     newInstance.length += 1;
   }
-
   return newInstance;
 };
 

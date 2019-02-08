@@ -1,5 +1,7 @@
 "use strict";
 exports.__esModule = true;
+;
+;
 var MyArray = /** @class */ (function () {
     function MyArray() {
         var data = [];
@@ -16,11 +18,13 @@ var MyArray = /** @class */ (function () {
             }
         }
     }
+    ;
     MyArray.prototype.forEach = function (callback, thisArg) {
         for (var i = 0; i < this.length; i++) {
             callback.call(thisArg, this[i], i, this);
         }
     };
+    ;
     MyArray.prototype.push = function () {
         var data = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -33,6 +37,7 @@ var MyArray = /** @class */ (function () {
         }
         return this.length;
     };
+    ;
     MyArray.prototype.pop = function () {
         var resultElement = this[this.length - 1];
         if (this.length !== 0) {
@@ -44,6 +49,7 @@ var MyArray = /** @class */ (function () {
         }
         return resultElement;
     };
+    ;
     MyArray.prototype.map = function (callback, thisArg) {
         if (typeof callback !== 'function') {
             throw new TypeError('Carefully! Callback is not a function!');
@@ -56,6 +62,7 @@ var MyArray = /** @class */ (function () {
         }
         return resultArr;
     };
+    ;
     MyArray.prototype.toString = function () {
         var resultString = '';
         if (this.length > 0) {
@@ -66,6 +73,7 @@ var MyArray = /** @class */ (function () {
         }
         return resultString;
     };
+    ;
     MyArray.prototype.filter = function (callback, thisArg) {
         var filterElements = new MyArray();
         for (var i = 0; i < this.length; i++) {
@@ -76,6 +84,7 @@ var MyArray = /** @class */ (function () {
         }
         return filterElements;
     };
+    ;
     MyArray.prototype.reduce = function (callback, initialValue) {
         if (this.length === 0 && !initialValue) {
             throw new TypeError('MyArray.prototype.reduce called on null or undefined');
@@ -89,6 +98,7 @@ var MyArray = /** @class */ (function () {
         }
         return accumulator;
     };
+    ;
     MyArray.prototype.sort = function (compareFn) {
         var comp = function (a, b) {
             if (a === undefined) {
@@ -143,6 +153,7 @@ var MyArray = /** @class */ (function () {
         }
         return undefined;
     };
+    ;
     MyArray.prototype.slice = function (begin, end) {
         var slicedArray = new MyArray();
         var from = 0;
@@ -180,6 +191,7 @@ var MyArray = /** @class */ (function () {
         }
         return newInstance;
     };
+    ;
     MyArray.prototype[Symbol.iterator] = function () {
         var current = 0;
         var that = this;
@@ -202,13 +214,5 @@ var MyArray = /** @class */ (function () {
     };
     return MyArray;
 }());
+;
 exports["default"] = MyArray;
-// let t = new Array();
-// t.map
-// let x = new MyArray(1, 2, 3);
-// //x.forEach((thisArg:any,data:any,index:number,src:any):void => console.log(thisArg), x);
-// //x.forEach((elem) => console.log(elem));
-// // console.log(x.push(8,7,7,"geg"));
-// // console.log(x);
-// console.log(x.pop());
-// console.log(x);
