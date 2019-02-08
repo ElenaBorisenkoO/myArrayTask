@@ -3,6 +3,4 @@ dist
 .idea/
 package-lock.json
 yarn.lock
-slice.test.js
-find.test.js
-spread.test.js
+

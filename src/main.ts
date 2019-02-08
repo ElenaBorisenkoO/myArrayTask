@@ -7,7 +7,7 @@ interface IMyArray<T> {
     map<U>(callback: (array: IMyArray<T>, index: number, elem: T) => U, thisArg?: any): IMyArray<U>;
     toString(): string;
     filter(callback: (elem: T, index: number, array: IMyArray<T>) => any, thisArg?: any): IMyArray<T>;
-    reduce(callback: (previousValue: T, currentValue: T, currentIndex: number, array: IMyArray<T>) => T, initialValue: T): T;
+    reduce<R>(callback: (previousValue: T, currentValue: T, currentIndex: number, array: IMyArray<T>) => R, initialValue?: any): R;
     sort(compareFn?: (a: number, b: number) => number): this;
     find(callback: (elem: T, index: number, obj: IMyArray<T>) => boolean, thisArg?: any): T | undefined;
     slice(start?: number, end?: number): IMyArray<T>;
@@ -21,13 +21,13 @@ interface IArrayLike<T> {
 class MyArray<T> implements IMyArray<T>{
     length: number;
     [key: number]: T;
-    constructor(...data: any[]) {
+    constructor(...data: T[] | [number]) {
         if (data.length === 1 && typeof data[0] === 'number') {
             this.length = data[0];
         } else {
             this.length = data.length;
             for (let i = 0; i < data.length; i++) {
-                this[i] = data[i];
+                this[i] = data[i] as T;
             }
         }
     };
@@ -51,7 +51,7 @@ class MyArray<T> implements IMyArray<T>{
         const resultElement = this[this.length - 1];
 
         if (this.length !== 0) {
-            let newElements = new MyArray();
+            let newElements = new MyArray<T>();
 
             for (let i = 0; i < this.length - 1; i++) {
                 newElements[i] = this[i];
@@ -103,7 +103,7 @@ class MyArray<T> implements IMyArray<T>{
         return filterElements;
     };
 
-    reduce(callback: (previousValue: T, currentValue: T, currentIndex: number, array: IMyArray<T>) => T, initialValue: T): T {
+    reduce<R>(callback: (previousValue: T, currentValue: T, currentIndex: number, array: IMyArray<T>) => R, initialValue?: any): R {
         if (this.length === 0 && !initialValue) {
             throw new TypeError('MyArray.prototype.reduce called on null or undefined');
         }
@@ -115,10 +115,10 @@ class MyArray<T> implements IMyArray<T>{
         let accumulator = initialValue === undefined ? this[0] : callback(initialValue, this[0], 0, this);
 
         for (let i = 1; i < this.length; i++) {
-            accumulator = callback(accumulator, this[i], i, this);
+            accumulator = callback(accumulator as T, this[i], i, this);
         }
 
-        return accumulator;
+        return accumulator as R;
     };
 
     sort(compareFn?: (a: number, b: number) => number): this {
@@ -214,13 +214,16 @@ class MyArray<T> implements IMyArray<T>{
         return slicedArray;
     };
 
-    static from<T>(arrayLike: IArrayLike<T>, mapFunction: (v: T, k: number) => number, thisArg?: any): MyArray<T> {
+    static from<T>(arrayLike: IArrayLike<T>): MyArray<T>;
+    static from<T, R>(arrayLike: IArrayLike<T>, mapFn: (value: T, index: number) => R, thisArg: any): MyArray<R>;
+
+    static from<T, R>(arrayLike: IArrayLike<T>, mapFunction?: (value: T, index: number) => R, thisArg?: any): MyArray<T> | MyArray<R>{
         if (arrayLike === undefined || arrayLike === null) {
             throw new Error('first argument not defined');
         }
 
         const applyMapFunction = (mapFunction !== undefined && typeof mapFunction === 'function');
-        const newInstance = new MyArray<T>();
+        const newInstance: MyArray<R> | MyArray<T>= new MyArray();
 
         for (let i = 0; i < arrayLike.length; i++) {
             newInstance[i] = applyMapFunction ? mapFunction.call(thisArg, arrayLike[i], i, arrayLike) : arrayLike[i];
@@ -228,6 +231,7 @@ class MyArray<T> implements IMyArray<T>{
         }
         return newInstance;
     };
+
 
     [Symbol.iterator]() {
         let current = 0;
